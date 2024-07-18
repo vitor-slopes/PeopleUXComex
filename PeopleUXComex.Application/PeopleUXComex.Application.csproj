@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PeopleUXComex.Core\PeopleUXComex.Core.csproj" />
+  </ItemGroup>
+
 </Project>
