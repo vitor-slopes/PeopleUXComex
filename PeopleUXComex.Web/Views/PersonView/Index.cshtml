@@ -1,0 +1,65 @@
+﻿@model IEnumerable<PeopleUXComex.Core.Entities.Person>
+
+@{
+    ViewBag.Title = "People";
+}
+
+<h2>Cadastros existentes</h2>
+
+<p>
+    @Html.ActionLink("Novo cadastro", "Create")
+</p>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <tr>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>CPF</th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.Name, "Edit", new { id = item.Id }, new { @class = "text-decoration-none text-dark" })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CPF)
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-link" })
+                        @using (Html.BeginForm("Delete", "PersonView", FormMethod.Post, new { @class = "inline-form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("id", item.Id)
+                            <input type="submit" value="X" class="btn btn-danger" onclick="return confirm('Deseja mesmo excluir este cadastro?');" />
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>Não há pessoas cadastradas.</p>
+}
+
+<style>
+    .inline-form {
+        display: inline;
+    }
+    .text-decoration-none {
+        text-decoration: none;
+    }
+    .text-dark {
+        color: #000;
+    }
+</style>
