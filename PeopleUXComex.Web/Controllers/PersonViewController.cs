@@ -66,7 +66,7 @@ namespace PeopleUXComex.Web.Controllers
             var viewModel = new EditPersonViewModel
             {
                 Person = person,
-                Addresses = addresses.ToList() // Conversão explícita para List<Address>
+                Addresses = addresses.ToList()
             };
 
             return View(viewModel);
@@ -114,7 +114,6 @@ namespace PeopleUXComex.Web.Controllers
             return RedirectToAction(nameof(Edit), new { id = address.PersonId });
         }
 
-        // Método para deletar uma pessoa
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)

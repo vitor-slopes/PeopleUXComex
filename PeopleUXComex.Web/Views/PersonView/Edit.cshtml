@@ -17,7 +17,7 @@
         @Html.HiddenFor(model => model.Person.Id)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Person.Name,"Nome", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Person.Name, "Nome", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Person.Name, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Person.Name, "", new { @class = "text-danger" })
@@ -25,7 +25,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Person.Phone,"Telefone", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Person.Phone, "Telefone", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Person.Phone, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Person.Phone, "", new { @class = "text-danger" })
@@ -61,10 +61,10 @@
 {
     <table class="table">
         <tr>
-            <th>Street</th>
+            <th>Rua</th>
             <th>CEP</th>
-            <th>City</th>
-            <th>State</th>
+            <th>Cidade</th>
+            <th>Estado</th>
             <th></th>
         </tr>
 
@@ -76,8 +76,8 @@
                 <td>@address.City</td>
                 <td>@address.State</td>
                 <td>
-                    @Html.ActionLink("Edit", "EditAddress", new { id = address.Id }) |
-                    @Html.ActionLink("Delete", "DeleteAddress", new { id = address.Id })
+                    @Html.ActionLink("Editar", "EditAddress", new { id = address.Id }) |
+                    @Html.ActionLink("Excluir", "DeleteAddress", new { id = address.Id })
                 </td>
             </tr>
         }
@@ -93,7 +93,7 @@ else
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addressModalLabel">Add Address</h5>
+                <h5 class="modal-title" id="addressModalLabel">Adicionar Endereço</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -102,10 +102,10 @@ else
                 @using (Html.BeginForm("AddAddress", "PersonView", FormMethod.Post, new { @class = "form-horizontal" }))
                 {
                     @Html.AntiForgeryToken()
-                    @Html.HiddenFor(model => model.Person.Id)
+                    @Html.Hidden("PersonId", Model.Person.Id)
 
                     <div class="form-group">
-                        @Html.LabelFor(model => model.NewAddress.Street,"Endereço", htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.LabelFor(model => model.NewAddress.Street, "Rua", htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
                             @Html.EditorFor(model => model.NewAddress.Street, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.NewAddress.Street, "", new { @class = "text-danger" })
@@ -113,7 +113,7 @@ else
                     </div>
 
                     <div class="form-group">
-                        @Html.LabelFor(model => model.NewAddress.CEP, htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.LabelFor(model => model.NewAddress.CEP, "CEP", htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
                             @Html.EditorFor(model => model.NewAddress.CEP, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.NewAddress.CEP, "", new { @class = "text-danger" })
@@ -121,7 +121,7 @@ else
                     </div>
 
                     <div class="form-group">
-                        @Html.LabelFor(model => model.NewAddress.City,"Cidade", htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.LabelFor(model => model.NewAddress.City, "Cidade", htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
                             @Html.EditorFor(model => model.NewAddress.City, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.NewAddress.City, "", new { @class = "text-danger" })
@@ -129,7 +129,7 @@ else
                     </div>
 
                     <div class="form-group">
-                        @Html.LabelFor(model => model.NewAddress.State,"Estado", htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.LabelFor(model => model.NewAddress.State, "Estado", htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
                             @Html.EditorFor(model => model.NewAddress.State, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.NewAddress.State, "", new { @class = "text-danger" })
