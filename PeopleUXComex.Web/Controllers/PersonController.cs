@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PeopleUXComex.Application.Services;
 using PeopleUXComex.Core.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PeopleUXComex.Web.Controllers
 {
-    public class PersonController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class PersonController : ControllerBase
     {
         private readonly PersonService _personService;
 
@@ -13,51 +17,52 @@ namespace PeopleUXComex.Web.Controllers
             _personService = personService;
         }
 
-        public async Task<ActionResult> Index()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Person>>> GetAll()
         {
             var people = await _personService.GetAllAsync();
-            return View(people);
+            return Ok(people);
         }
 
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Person person)
-        {
-            if (ModelState.IsValid)
-            {
-                await _personService.AddAsync(person);
-                return RedirectToAction("Index");
-            }
-            return View(person);
-        }
-
-        public async Task<ActionResult> Edit(int id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Person>> GetById(int id)
         {
             var person = await _personService.GetByIdAsync(id);
             if (person == null)
             {
                 return NotFound();
             }
-            return View(person);
+            return Ok(person);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Person person)
+        public async Task<ActionResult> Create(Person person)
         {
             if (ModelState.IsValid)
             {
-                await _personService.UpdateAsync(person);
-                return RedirectToAction("Index");
+                await _personService.AddAsync(person);
+                return CreatedAtAction(nameof(GetById), new { id = person.Id }, person);
             }
-            return View(person);
+            return BadRequest(ModelState);
         }
 
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Edit(int id, Person person)
+        {
+            if (id != person.Id)
+            {
+                return BadRequest();
+            }
+
+            if (ModelState.IsValid)
+            {
+                await _personService.UpdateAsync(person);
+                return NoContent();
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
             var person = await _personService.GetByIdAsync(id);
@@ -65,15 +70,9 @@ namespace PeopleUXComex.Web.Controllers
             {
                 return NotFound();
             }
-            return View(person);
-        }
 
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
-        {
             await _personService.DeleteAsync(id);
-            return RedirectToAction("Index");
+            return NoContent();
         }
     }
 }

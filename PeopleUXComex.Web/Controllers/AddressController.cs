@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PeopleUXComex.Application.Services;
 using PeopleUXComex.Core.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PeopleUXComex.Web.Controllers
 {
-    public class AddressController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AddressController : ControllerBase
     {
         private readonly AddressService _addressService;
 
@@ -14,69 +17,77 @@ namespace PeopleUXComex.Web.Controllers
             _addressService = addressService;
         }
 
-        public async Task<ActionResult> Index(int personId)
+        [HttpGet("{personId}")]
+        public async Task<ActionResult<IEnumerable<Address>>> GetByPersonId(int personId)
         {
             var addresses = await _addressService.GetByPersonIdAsync(personId);
-            ViewBag.PersonId = personId;
-            return View(addresses);
-        }
-
-        public ActionResult Create(int personId)
-        {
-            ViewBag.PersonId = personId;
-            return View();
+            if (addresses == null)
+            {
+                return NotFound();
+            }
+            return Ok(addresses);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Address address)
         {
             if (ModelState.IsValid)
             {
                 await _addressService.AddAsync(address);
-                return RedirectToAction("Index", new { personId = address.PersonId });
+                return CreatedAtAction(nameof(GetByPersonId), new { personId = address.PersonId }, address);
             }
-            return View(address);
+            return BadRequest(ModelState);
         }
 
-        public async Task<ActionResult> Edit(int id)
+        [HttpGet("edit/{id}")]
+        public async Task<ActionResult<Address>> Edit(int id)
         {
             var address = await _addressService.GetByIdAsync(id);
             if (address == null)
             {
                 return NotFound();
             }
-            return View(address);
+            return Ok(address);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Address address)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Edit(int id, Address address)
         {
+            if (id != address.Id)
+            {
+                return BadRequest();
+            }
+
             if (ModelState.IsValid)
             {
                 await _addressService.UpdateAsync(address);
-                return RedirectToAction("Index", new { personId = address.PersonId });
+                return NoContent();
             }
-            return View(address);
+            return BadRequest(ModelState);
         }
 
-        public async Task<ActionResult> Delete(int id)
+        [HttpGet("delete/{id}")]
+        public async Task<ActionResult<Address>> Delete(int id)
         {
             var address = await _addressService.GetByIdAsync(id);
             if (address == null)
             {
                 return NotFound();
             }
-            return View(address);
+            return Ok(address);
         }
 
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id, int personId)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
+            var address = await _addressService.GetByIdAsync(id);
+            if (address == null)
+            {
+                return NotFound();
+            }
+
             await _addressService.DeleteAsync(id);
-            return RedirectToAction("Index", new { personId });
+            return NoContent();
         }
     }
 }
