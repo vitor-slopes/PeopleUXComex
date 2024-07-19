@@ -1,62 +1,49 @@
-﻿using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Threading.Tasks;
-using Dapper;
-using PeopleUXComex.Core.Entities;
+﻿using PeopleUXComex.Core.Entities;
 using PeopleUXComex.Core.Interfaces;
-using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace PeopleUXComex.Infrastructure.Data
 {
     public class PersonRepository : IPersonRepository
     {
-        private readonly string _connectionString;
+        private readonly PeopleUXComexContext _context;
 
-        public PersonRepository(IConfiguration configuration)
+        public PersonRepository(PeopleUXComexContext context)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _context = context;
         }
 
         public async Task<IEnumerable<Person>> GetAllAsync()
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                return await connection.QueryAsync<Person>("SELECT * FROM Person");
-            }
+            return await _context.Persons.ToListAsync();
         }
 
         public async Task<Person> GetByIdAsync(int id)
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                return await connection.QueryFirstOrDefaultAsync<Person>("SELECT * FROM Person WHERE Id = @Id", new { Id = id });
-            }
+            return await _context.Persons.FindAsync(id);
         }
 
         public async Task AddAsync(Person person)
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                var sql = "INSERT INTO Person (Name, Phone, CPF) VALUES (@Name, @Phone, @CPF)";
-                await connection.ExecuteAsync(sql, person);
-            }
+            _context.Persons.Add(person);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Person person)
+        public async Task<bool> UpdateAsync(Person person)
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                var sql = "UPDATE Person SET Name = @Name, Phone = @Phone, CPF = @CPF WHERE Id = @Id";
-                await connection.ExecuteAsync(sql, person);
-            }
+            _context.Entry(person).State = EntityState.Modified;
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task DeleteAsync(int id)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            var person = await _context.Persons.FindAsync(id);
+            if (person != null)
             {
-                var sql = "DELETE FROM Person WHERE Id = @Id";
-                await connection.ExecuteAsync(sql, new { Id = id });
+                _context.Persons.Remove(person);
+                await _context.SaveChangesAsync();
             }
         }
     }

@@ -29,9 +29,17 @@ namespace PeopleUXComex.Application.Services
             await _personRepository.AddAsync(person);
         }
 
-        public async Task UpdateAsync(Person person)
+        public async Task<bool> UpdateAsync(Person person)
         {
-            await _personRepository.UpdateAsync(person);
+            try
+            {
+                await _personRepository.UpdateAsync(person);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public async Task DeleteAsync(int id)
