@@ -1,4 +1,3 @@
-```markdown
 # PeopleUXComex
 
 ## Descrição
@@ -107,6 +106,9 @@ cd PeopleUXComex
 
 - **Cadastro de Endereços**: Atualmente, a funcionalidade de adicionar endereços ao cadastro de pessoas está com problemas e precisa de desenvolvimento adicional. Especificamente, ao tentar adicionar um endereço, a aplicação está retornando erros de validação indicando que campos obrigatórios (CEP, City, State, Street) não estão sendo preenchidos corretamente. Esta etapa requer correção para garantir que os endereços sejam salvos corretamente no banco de dados.
 
+## Vídeo de apresrntação do projeto ##
+
+https://www.youtube.com/watch?v=FxaCGDsvK_A&ab_channel=Vitorslopes
 
 ## Licença
 
