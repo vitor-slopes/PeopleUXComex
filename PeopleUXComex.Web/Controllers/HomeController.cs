@@ -3,8 +3,7 @@ using PeopleUXComex.Web.Models;
 using System.Diagnostics;
 
 namespace PeopleUXComex.Web.Controllers
-{
-    // Removido o atributo [ApiController] para manter a natureza MVC do HomeController
+{    
     [Route("[controller]/[action]")]
     public class HomeController : Controller
     {
