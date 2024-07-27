@@ -17,6 +17,7 @@ namespace PeopleUXComex.Web.Controllers
             _addressService = addressService;
         }
 
+
         [HttpGet("{personId}")]
         public async Task<ActionResult<IEnumerable<Address>>> GetByPersonId(int personId)
         {
@@ -27,6 +28,7 @@ namespace PeopleUXComex.Web.Controllers
             }
             return Ok(addresses);
         }
+
 
         [HttpPost]
         public async Task<ActionResult> Create(Address address)
@@ -39,6 +41,7 @@ namespace PeopleUXComex.Web.Controllers
             return BadRequest(ModelState);
         }
 
+
         [HttpGet("edit/{id}")]
         public async Task<ActionResult<Address>> Edit(int id)
         {
@@ -49,6 +52,7 @@ namespace PeopleUXComex.Web.Controllers
             }
             return Ok(address);
         }
+
 
         [HttpPut("{id}")]
         public async Task<ActionResult> Edit(int id, Address address)
@@ -66,6 +70,7 @@ namespace PeopleUXComex.Web.Controllers
             return BadRequest(ModelState);
         }
 
+
         [HttpGet("delete/{id}")]
         public async Task<ActionResult<Address>> Delete(int id)
         {
@@ -76,6 +81,7 @@ namespace PeopleUXComex.Web.Controllers
             }
             return Ok(address);
         }
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteConfirmed(int id)
